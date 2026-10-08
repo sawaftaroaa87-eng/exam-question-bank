@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة بنك الأسئلة والاختبارات</title>
+    <style>
+        :root {
+            --primary-color: #1b4d3e;
+            --primary-hover: #13382c;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+            --accent-color: #27ae60;
+            --danger-color: #e74c3c;
+            --border-radius: 8px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background-color: #e0e6e4;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--primary-color);
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .section-card {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: none;
+        }
+
+        .section-card.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 15px;
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .question-item {
+            border-right: 4px solid var(--primary-color);
+            background: #fafafa;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .delete-btn {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .quiz-options label {
+            display: block;
+            background: #f0f4f2;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .result-box {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--primary-color);
+            padding: 20px;
+            background-color: #e8f5e9;
+            border-radius: var(--border-radius);
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>نظام بنك الأسئلة والاختبارات</h1>
+        <p>إدارة الأسئلة وإجراء الاختبارات التفاعلية</p>
+    </header>
+
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('add-section')">إضافة سؤال</button>
+        <button class="tab-btn" onclick="switchTab('list-section')">بنك الأسئلة</button>
+        <button class="tab-btn" onclick="switchTab('quiz-section')">بدء اختبار</button>
+    </div>
+
+    <!-- قسم إضافة سؤال -->
+    <div id="add-section" class="section-card active">
+        <h2>إضافة سؤال جديد لقاعدة البيانات</h2>
+        <form id="question-form">
+            <div class="form-group">
+                <label>نص السؤال:</label>
+                <input type="text" id="question-text" required placeholder="أدخل نص السؤال هنا...">
+            </div>
+            <div class="form-group">
+                <label>الخيار الأول:</label>
+                <input type="text" id="opt1" required placeholder="الخيار الأول">
+            </div>
+            <div class="form-group">
+                <label>الخيار الثاني:</label>
+                <input type="text" id="opt2" required placeholder="الخيار الثاني">
+            </div>
+            <div class="form-group">
+                <label>الخيار الثالث:</label>
+                <input type="text" id="opt3" required placeholder="الخيار الثالث">
+            </div>
+            <div class="form-group">
+                <label>رقم الخيار الصحيح (1-3):</label>
+                <select id="correct-opt">
+                    <option value="1">الخيار الأول</option>
+                    <option value="2">الخيار الثاني</option>
+                    <option value="3">الخيار الثالث</option>
+                </select>
+            </div>
+            <button type="submit" class="btn">حفظ السؤال في قاعدة البيانات</button>
+        </form>
+    </div>
+
+    <!-- قسم عرض الأسئلة المخزنة -->
+    <div id="list-section" class="section-card">
+        <h2>الأسئلة المخزنة حالياً</h2>
+        <div id="questions-container">
+            <!-- سيتم تحميل الأسئلة هنا -->
+        </div>
+    </div>
+
+    <!-- قسم تقديم الاختبار -->
+    <div id="quiz-section" class="section-card">
+        <h2>اختبار تفاعلي</h2>
+        <div id="quiz-container">
+            <button class="btn" onclick="startQuiz()">توليد اختبار عشوائي</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Database Operations using LocalStorage
+    const DB_KEY = 'quiz_questions_db';
+
+    function getQuestionsFromDB() {
+        const data = localStorage.getItem(DB_KEY);
+        return data ? JSON.parse(data) : [];
+    }
+
+    function saveQuestionsToDB(questions) {
+        localStorage.setItem(DB_KEY, JSON.stringify(questions));
+    }
+
+    // Tab Navigation
+    function switchTab(tabId) {
+        document.querySelectorAll('.section-card').forEach(sec => sec.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
+
+        if(tabId === 'list-section') renderQuestionsList();
+    }
+
+    // Add New Question
+    document.getElementById('question-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const newQuestion = {
+            id: Date.now(),
+            text: document.getElementById('question-text').value,
+            options: [
+                document.getElementById('opt1').value,
+                document.getElementById('opt2').value,
+                document.getElementById('opt3').value
+            ],
+            correct: parseInt(document.getElementById('correct-opt').value) - 1
+        };
+
+        const questions = getQuestionsFromDB();
+        questions.push(newQuestion);
+        saveQuestionsToDB(questions);
+
+        alert('تم حفظ السؤال بنجاح في قاعدة البيانات!');
+        this.reset();
+    });
+
+    // Render Questions List
+    function renderQuestionsList() {
+        const questions = getQuestionsFromDB();
+        const container = document.getElementById('questions-container');
+        
+        if (questions.length === 0) {
+            container.innerHTML = '<p>لا توجد أسئلة مخزنة حالياً. قم بإضافة أسئلة أولاً.</p>';
+            return;
+        }
+
+        container.innerHTML = questions.map((q, index) => `
+            <div class="question-item">
+                <button class="delete-btn" onclick="deleteQuestion(${q.id})">حذف</button>
+                <h3>${index + 1}. ${q.text}</h3>
+                <ul>
+                    ${q.options.map((opt, i) => `
+                        <li style="color: ${i === q.correct ? 'var(--accent-color)' : 'inherit'}">
+                            ${opt}${i === q.correct ? '✔ (الإجابة الصحيحة)' : ''}
+                        </li>
+                    `).join('')}
+                </ul>
+            </div>
+        `).join('');
+    }
+
+    // Delete Question
+    function deleteQuestion(id) {
+        let questions = getQuestionsFromDB();
+        questions = questions.filter(q => q.id !== id);
+        saveQuestionsToDB(questions);
+        renderQuestionsList();
+    }
+
+    // Quiz Execution Logic
+    function startQuiz() {
+        const questions = getQuestionsFromDB();
+        const container = document.getElementById('quiz-container');
+
+        if (questions.length === 0) {
+            container.innerHTML = '<p>الرجاء إضافة أسئلة في بنك الأسئلة أولاً لتتمكن من أداء الاختبار.</p>';
+            return;
+        }
+
+        // Shuffle questions
+        const shuffled = [...questions].sort(() => 0.5 - Math.random());
+        
+        container.innerHTML = `
+            <form id="quiz-form">
+                ${shuffled.map((q, index) => `
+                    <div class="question-item">
+                        <p><strong>س${index + 1}:${q.text}</strong></p>
+                        <div class="quiz-options">
+                            ${q.options.map((opt, optIndex) => `
+                                <label>
+                                    <input type="radio" name="q_${q.id}" value="${optIndex}" required>
+                                    ${opt}
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                `).join('')}
+                <button type="submit" class="btn">إنهاء الاختبار وعرض النتيجة</button>
+            </form>
+            <div id="quiz-result"></div>
+        `;
+
+        document.getElementById('quiz-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let score = 0;
+            
+            shuffled.forEach(q => {
+                const selected = document.querySelector(`input[name="q_${q.id}"]:checked`);
+                if (selected && parseInt(selected.value) === q.correct) {
+                    score++;
+                }
+            });
+
+            document.getElementById('quiz-result').innerHTML = `
+                <div class="result-box">
+                    نتيجة الاختبار: ${score} من ${shuffled.length} 
+                    (${Math.round((score / shuffled.length) * 100)}%)
+                </div>
+            `;
+        });
+    }
+</script>
+
+</body>
+</html>
